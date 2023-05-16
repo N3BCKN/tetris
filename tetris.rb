@@ -23,19 +23,19 @@ class Tetromino
 
   private
   def random_color
-    ['#0341AE', '##72CB3B', '##FFD500', '#FF971C', '#FF3213'].shuffle 
+    ['#0341AE', '##72CB3B', '##FFD500', '#FF971C', '#FF3213'].sample 
   end
 
   def random_shape
     [
-      [[2,0].[2,1],[2,2],[2,3]], # I
+      [[2,0],[2,1],[2,2],[2,3]], # I
       [[1,0],[1,1],[2,1],[3,1]], # J 
       [[3,0],[3,1],[2,1],[1,1]], # L 
       [[1,0],[1,1],[2,0],[2,1]], # O
       [[2,0],[3,0],[1,1],[2,1]], # S 
       [[2,0],[1,1],[2,1],[3,1]], # T 
       [[1,0],[2,0],[2,1],[3,1]], # Z
-  ].shuffle
+  ].sample
   end 
 
   def random_position 
@@ -58,10 +58,8 @@ class Game
   end
 end
 
-# game = Game.new 
-t = Tetromino.new 
-p t.color
-p t.coordinates
+game = Game.new 
+
 
 set width: WIDTH
 set height: HEIGHT
