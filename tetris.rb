@@ -50,6 +50,11 @@ class Game
   end
 
   def draw
+    @tetrominos.each do |tetromino|
+      4.times do |n|
+        Square.new(x: tetromino[n][0] ,y: tetromino[n][1] ,size: GRID,color: tetromino.color)
+      end 
+    end
   end
 
   private 
@@ -59,6 +64,7 @@ class Game
 end
 
 game = Game.new 
+game.draw
 
 
 set width: WIDTH
