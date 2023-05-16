@@ -23,7 +23,7 @@ class Tetromino
 
   private
   def random_color
-    ['#0341AE', '##72CB3B', '##FFD500', '#FF971C', '#FF3213'].sample 
+    ['#0341AE', '#72CB3B', '##FFD500', '#FF971C', '#FF3213'].sample 
   end
 
   def random_shape
@@ -47,12 +47,13 @@ class Game
 
   def initialize
     @tetrominos = []
+    generate_tetromino
   end
 
   def draw
     @tetrominos.each do |tetromino|
       4.times do |n|
-        Square.new(x: tetromino[n][0] ,y: tetromino[n][1] ,size: GRID,color: tetromino.color)
+        Square.new(x: tetromino.coordinates[n][0] * GRID  ,y: tetromino.coordinates[n][1] * GRID ,size: GRID - 1,color: tetromino.color)
       end 
     end
   end
