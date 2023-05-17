@@ -59,13 +59,13 @@ class Game
     coordinates = @tetrominos.last.coordinates.clone
     case direction
     when 'down'
-      coordinates.map! {|cord| [cord[0], cord[1]+1]}
+      coordinates.map! {|cord| [cord[0], cord[1] + 1]}
     when 'left'
       coordinates.map! {|cord| [cord[0] - 1, cord[1]]}
     when 'right'
       coordinates.map! {|cord| [cord[0] + 1, cord[1]]}
     end
-    
+
     @tetrominos.last.coordinates = coordinates unless hit_wall?(coordinates)
   end
 
@@ -79,11 +79,10 @@ class Game
   end 
 end
 
-
-
 set width: WIDTH
 set height: HEIGHT
 set color: BACKGROUND_COLOR
+set fps_cap: 10
 set title: 'tetris'
 
 
