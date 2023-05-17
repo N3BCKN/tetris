@@ -6,24 +6,19 @@ GRID = 50
 BACKGROUND_COLOR = '#000000'
 
 class Tetromino
-  attr_accessor :alive
-  attr_reader :color, :coordinates
+  attr_accessor :alive, :coordinates
+  attr_reader :color
 
   def initialize 
     @color = random_color
     @coordinates = random_shape
+    adjust_possition
     @alive = true
-  end
-
-  def move(speed = 1)
-  end
-
-  def rotate
   end
 
   private
   def random_color
-    ['#0341AE', '#72CB3B', '##FFD500', '#FF971C', '#FF3213'].sample 
+    ['#0341AE', '#72CB3B', '#FFD500', '#FF971C', '#FF3213'].sample 
   end
 
   def random_shape
@@ -38,7 +33,9 @@ class Tetromino
   ].sample
   end 
 
-  def random_position 
+  def adjust_possition 
+    x_multiplier = rand(-1..2)
+    @coordinates.map! {|cord| [cord[0] + x_multiplier, cord[1]]}
   end 
 end
 
@@ -58,19 +55,50 @@ class Game
     end
   end
 
+  def move(direction)
+    coordinates = @tetrominos.last.coordinates.clone
+    case direction
+    when 'down'
+      coordinates.map! {|cord| [cord[0], cord[1]+1]}
+    when 'left'
+      coordinates.map! {|cord| [cord[0] - 1, cord[1]]}
+    when 'right'
+      coordinates.map! {|cord| [cord[0] + 1, cord[1]]}
+    end
+    
+    @tetrominos.last.coordinates = coordinates unless hit_wall?(coordinates)
+  end
+
   private 
   def generate_tetromino
     @tetrominos << Tetromino.new
   end
+
+  def hit_wall?(coordinates)
+    coordinates.any? {|cord| cord[0] < 0 || cord[0] > 9}
+  end 
 end
 
-game = Game.new 
-game.draw
 
 
 set width: WIDTH
 set height: HEIGHT
 set color: BACKGROUND_COLOR
 set title: 'tetris'
+
+
+game = Game.new 
+
+update do 
+  clear 
+
+  game.draw
+  
+end 
+
+on :key_down do |event|
+  game.move(event.key) if ['down','left','right'].include? event.key
+end
+
 
 show
