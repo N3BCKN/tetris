@@ -1,4 +1,5 @@
 require 'ruby2d'
+require 'debug'
 
 WIDTH = 500
 HEIGHT = 1000 
@@ -34,7 +35,7 @@ class Tetromino
   end 
 
   def adjust_possition 
-    x_multiplier = rand(-1..2)
+    x_multiplier = rand(-1..5)
     @coordinates.map! {|cord| [cord[0] + x_multiplier, cord[1]]}
   end 
 end
@@ -44,6 +45,7 @@ class Game
 
   def initialize
     @tetrominos = []
+    @timer = Time.now.strftime('%s%L').to_i
     generate_tetromino
   end
 
@@ -56,7 +58,9 @@ class Game
   end
 
   def move(direction)
+    return if hit_bottom?
     coordinates = @tetrominos.last.coordinates.clone
+
     case direction
     when 'down'
       coordinates.map! {|cord| [cord[0], cord[1] + 1]}
@@ -69,6 +73,15 @@ class Game
     @tetrominos.last.coordinates = coordinates unless hit_wall?(coordinates)
   end
 
+  def tick 
+    current_time = Time.now.strftime('%s%L').to_i
+
+    if current_time - @timer >= 1000 
+      @timer = current_time
+      move('down')
+    end
+  end
+
   private 
   def generate_tetromino
     @tetrominos << Tetromino.new
@@ -77,6 +90,29 @@ class Game
   def hit_wall?(coordinates)
     coordinates.any? {|cord| cord[0] < 0 || cord[0] > 9}
   end 
+
+  def hit_bottom?
+    tetromino = @tetrominos.last
+   
+    if tetromino.coordinates.any? {|cord| cord[1] == 19} || hit_other_tetromino?
+      tetromino.alive = false 
+      generate_tetromino
+      return true
+    end
+    false
+  end
+
+  def hit_other_tetromino?
+    tetromino = tetrominos.last
+    other_tetrominos = @tetrominos[0,@tetrominos.size-1]
+    return false if other_tetrominos.size == 0
+
+    other_coordinates_array = other_tetrominos.map(&:coordinates)
+    other_coordinates_array.each do |other_coordinates|
+      return true if tetromino.coordinates.any? {|cord| other_coordinates.include? [cord[0], cord[1] + 1] } 
+    end
+    false
+  end
 end
 
 set width: WIDTH
@@ -85,18 +121,16 @@ set color: BACKGROUND_COLOR
 set fps_cap: 10
 set title: 'tetris'
 
-
 game = Game.new 
 
 update do 
   clear 
-
   game.draw
-  
+  game.tick
 end 
 
 on :key_down do |event|
-  game.move(event.key) if ['down','left','right'].include? event.key
+  game.move(event.key) if ['down','left','right'].include?(event.key)
 end
 
 
