@@ -58,8 +58,10 @@ class Game
   end
 
   def move_down
-    current_tetromino.coordinates.map! {|cord| [cord[0], cord[1] + 1]}
-    hit_bottom?
+    coordinates = current_tetromino.coordinates.clone
+    coordinates.map! {|cord| [cord[0], cord[1] + 1]}
+
+    current_tetromino.coordinates = coordinates unless will_hit_bottom?(coordinates)
   end
 
   def move_horizontal(direction)
@@ -67,8 +69,7 @@ class Game
     coordinates = current_tetromino.coordinates.clone
 
     coordinates.map! {|cord| [cord[0] + mover, cord[1]]}
-
-    current_tetromino.coordinates = coordinates unless will_hit_wall?(coordinates) || hit_other_tetromino?
+    current_tetromino.coordinates = coordinates unless will_hit_wall?(coordinates) || will_hit_other_tetromino?(coordinates)
   end
 
   def tick 
@@ -85,12 +86,12 @@ class Game
     @tetrominos << Tetromino.new
   end
 
-  def will_hit_wall?(coordinates)
-    coordinates.any? {|cord| cord[0] < 0 || cord[0] > 9}
+  def will_hit_wall?(new_coordinates)
+    new_coordinates.any? {|cord| cord[0] < 0 || cord[0] > 9}
   end 
 
-  def hit_bottom?
-    if current_tetromino.coordinates.any? {|cord| cord[1] == 19} || hit_other_tetromino?
+  def will_hit_bottom?(new_coordinates)
+    if current_tetromino.coordinates.any? {|cord| cord[1] == 19} || will_hit_other_tetromino?(new_coordinates)
       current_tetromino.alive = false 
       generate_tetromino
       return true
@@ -98,11 +99,9 @@ class Game
     false
   end
 
-  def hit_other_tetromino?
+  def will_hit_other_tetromino?(new_coordinates)
     other_tetrominos_coordinates.each do |other_coordinates|
-      if current_tetromino.coordinates.any? {|cord| other_coordinates.include? [cord[0], cord[1] + 1] } 
-        return true 
-      end 
+      return true if (new_coordinates & other_coordinates).any?
     end
     false
   end
@@ -136,7 +135,6 @@ on :key_down do |event|
   elsif event.key == 'down'
     game.move_down
   end
-  # game.move(event.key) if ['down','left','right'].include?(event.key)
 end
 
 
