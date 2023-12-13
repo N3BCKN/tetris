@@ -8,6 +8,11 @@ set width: WIDTH
 set heigh: HEIGH
 set title: 'tetris'
 
+
+class Color
+
+end
+
 class Board
   attr_accessor :grid
 
@@ -18,7 +23,7 @@ class Board
   def draw
     @grid.each_with_index do |row, i|
       row.each_with_index do |_, j|
-        Square.new(x: i * TILE_SIZE, y: j * TILE_SIZE , size: TILE_SIZE - 1, color: 'blue')
+        Square.new(x: i * TILE_SIZE, y: j * TILE_SIZE , size: TILE_SIZE - 1, color: '#25d600')
       end
     end 
   end
