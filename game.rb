@@ -4,6 +4,7 @@ class Game
     @tetrominos = generate_tetrominos
     @current_tetromino = random_tetromino
     @next_tetromino = random_tetromino
+    @game_over = false
   end 
 
   def move_left
@@ -65,5 +66,7 @@ class Game
 
     @current_tetromino = @next_tetromino
     @next_tetromino = random_tetromino
+    
+    @game_over = true unless tetromino_will_fit?(0, 0)
   end
 end

@@ -30,11 +30,13 @@ on :key_down do |event|
     game.move_left
   when 'right'
     game.move_right
-  when 'down'
-    game.move_down
   when 'up'
     game.rotate_tetromino
   end
+end
+
+on :key_held do |event|
+  game.move_down if event.key == 'down'
 end
 
 show 
