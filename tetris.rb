@@ -6,12 +6,12 @@ require_relative('./tetromino')
 require_relative('./tetrominos')
 require_relative('./game')
 
-WIDTH     = 300
-HEIGH     = 600
-TILE_SIZE = 30
+WIDTH      = 300
+HEIGHT     = 600
+TILE_SIZE  = 30
 
 set width: WIDTH
-set heigh: HEIGH
+set height: HEIGHT
 set fps_cap: 30
 set title: 'tetris'
 

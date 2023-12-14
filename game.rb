@@ -1,5 +1,3 @@
-require('byebug')
-
 class Game
   def initialize
     @board = Board.new
@@ -20,12 +18,15 @@ class Game
     @current_tetromino.move(0,1) if tetromino_will_fit?(0,1)
 
     #check if any next moves toward this dirrection are still possible
-    lock_tetromino unless tetromino_will_fit?(0,1)
+    unless tetromino_will_fit?(0,1)
+      lock_tetromino
+      @board.clean_full_rows
+    end
   end
 
   def rotate_tetromino
     @current_tetromino.rotate 
-    @current_tetromino.undo_rotation unless @current_tetromino.is_inside?
+    @current_tetromino.undo_rotation unless tetromino_is_inside?
   end
 
   def draw
@@ -34,8 +35,15 @@ class Game
   end
 
   private 
+  def tetromino_is_inside?
+    @current_tetromino.cells_position.all? {|cell| (0..19).include?(cell[0]) && (0..9).include?(cell[1]) }
+  end
+
   def tetromino_will_fit?(col, row)
-    inside_board = @current_tetromino.cells_position.all? {|cell| (0..15).include?(cell[0] + row) && (0..9).include?(cell[1] + col) }
+    inside_board = @current_tetromino.cells_position.all? {|cell| (0..19).include?(cell[0] + row) && (0..9).include?(cell[1] + col) }
+
+    return false unless inside_board
+
     not_touching_others = @current_tetromino.cells_position.all? {|cell| @board[[cell[0] + row, cell[1] + col]] == 0}
 
     inside_board && not_touching_others
