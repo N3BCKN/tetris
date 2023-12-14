@@ -29,6 +29,8 @@ on :key_down do |event|
     game.move_right
   when 'down'
     game.move_down
+  when 'up'
+    game.rotate_tetromino
   end
 end
 

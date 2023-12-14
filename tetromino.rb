@@ -18,6 +18,10 @@ class Tetromino
     tiles.map {|tile| [tile[0] + @row_offset, tile[1] + @col_offset]}
   end
 
+  def rotate
+    @rotation_state == 3 ? @rotation_state = 0 : @rotation_state += 1
+  end
+
   def draw
     grid = cells_position
     grid.each do |tile|

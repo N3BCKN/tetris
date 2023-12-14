@@ -23,6 +23,10 @@ class Game
     @current_tetromino.move(0,1) if tetromino_fits?(0,1)
   end
 
+  def rotate_tetromino
+    @current_tetromino.rotate 
+  end
+
   def draw
     @board.draw
     @current_tetromino.draw
