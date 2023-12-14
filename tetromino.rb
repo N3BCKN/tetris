@@ -1,4 +1,6 @@
 class Tetromino
+  attr_reader :id 
+
   def initialize(id)
     @id = id
     @cells = []
