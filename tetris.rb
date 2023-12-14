@@ -1,4 +1,5 @@
 require('ruby2d')
+require('byebug')
 
 require_relative('./paint')
 require_relative('./board')
@@ -25,22 +26,36 @@ update do
   clear
   game.draw
 
+  if game.paused
+    Interface.draw_pause_message('game paused')
+    next
+  end
+
+  if game.game_over
+    Interface.draw_game_over
+    next
+  end
+
   game.move_down if Window.frames % 30 == 0 
 end
 
 on :key_down do |event|
-  case event.key
-  when 'left'
-    game.move_left
-  when 'right'
-    game.move_right
-  when 'up'
-    game.rotate_tetromino
-  end
+  game.pause if event.key == 'escape' && !game.game_over
+
+  unless game.paused || game.game_over
+    case event.key
+    when 'left'
+      game.move_left
+    when 'right'
+      game.move_right
+    when 'up'
+      game.rotate_tetromino
+    end
+  end 
 end
 
 on :key_held do |event|
-  game.move_down if event.key == 'down'
+  game.move_down if event.key == 'down' && !game.game_over && !game.paused
 end
 
 show 

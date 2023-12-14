@@ -1,4 +1,7 @@
 class Game
+  attr_accessor :paused, :game_over
+
+
   def initialize
     @board = Board.new
     @interface = Interface.new
@@ -33,6 +36,10 @@ class Game
     @current_tetromino.undo_rotation unless tetromino_is_inside?
   end
 
+  def pause
+    @paused = !@paused
+  end
+
   def draw
     @board.draw
     @current_tetromino.draw
@@ -40,8 +47,7 @@ class Game
     @interface.draw_score(@score)
     @interface.draw_next_tetromino(@next_tetromino)
 
-
-    @interface.draw_message
+    Interface.draw_pause_message unless @paused
   end
 
   private 

@@ -18,7 +18,11 @@ class Interface
     end
   end
 
-  def draw_message(message = 'press ESC to pause', color = 'white')
+  def self.draw_pause_message(message = 'press ESC to pause')
     Text.new(message, x: WIDTH + 15, y: 450 , size: 20)
+  end
+
+  def self.draw_game_over
+    Text.new('GAME OVER', x: WIDTH + 25, y: 520 , size: 25, color: 'red')
   end
 end
