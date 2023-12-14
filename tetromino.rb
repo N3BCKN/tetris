@@ -27,11 +27,7 @@ class Tetromino
   def undo_rotation
     @rotation_state == @cells.size - 1? @rotation_state = 0 : @rotation_state -= 1
   end
-
-  def will_fit?(col, row)
-    cells_position.all? {|cell| (0..15).include?(cell[0] + row) && (0..9).include?(cell[1] + col) }
-  end
-
+  
   def is_inside?
     cells_position.all? {|cell| (0..15).include?(cell[0]) && (0..9).include?(cell[1]) }
   end

@@ -9,23 +9,22 @@ class Game
   end 
 
   def move_left
-    @current_tetromino.move(-1,0) if @current_tetromino.will_fit?(-1,0)
+    @current_tetromino.move(-1,0) if tetromino_will_fit?(-1,0)
   end 
 
   def move_right
-    @current_tetromino.move(1,0) if @current_tetromino.will_fit?(1,0)
+    @current_tetromino.move(1,0) if tetromino_will_fit?(1,0)
   end 
 
   def move_down
-    @current_tetromino.move(0,1) if @current_tetromino.will_fit?(0,1)
+    @current_tetromino.move(0,1) if tetromino_will_fit?(0,1)
 
     #check if any next moves toward this dirrection are still possible
-    lock_tetromino unless @current_tetromino.will_fit?(0,1)
+    lock_tetromino unless tetromino_will_fit?(0,1)
   end
 
   def rotate_tetromino
     @current_tetromino.rotate 
-
     @current_tetromino.undo_rotation unless @current_tetromino.is_inside?
   end
 
@@ -35,6 +34,13 @@ class Game
   end
 
   private 
+  def tetromino_will_fit?(col, row)
+    inside_board = @current_tetromino.cells_position.all? {|cell| (0..15).include?(cell[0] + row) && (0..9).include?(cell[1] + col) }
+    not_touching_others = @current_tetromino.cells_position.all? {|cell| @board[[cell[0] + row, cell[1] + col]] == 0}
+
+    inside_board && not_touching_others
+  end
+
   def random_tetromino
     @tetrominos = generate_tetrominos if @tetrominos.empty? 
     @tetrominos.delete(@tetrominos.sample)
