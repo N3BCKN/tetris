@@ -38,6 +38,8 @@ class Board
         move_row_down(row_index, completed)
       end
     end
+    
+    completed
   end
   
   private

@@ -1,5 +1,4 @@
 require('ruby2d')
-require('byebug')
 
 require_relative('./paint')
 require_relative('./board')

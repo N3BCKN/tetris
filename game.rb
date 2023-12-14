@@ -1,7 +1,6 @@
 class Game
   attr_accessor :paused, :game_over
 
-
   def initialize
     @board = Board.new
     @interface = Interface.new
@@ -27,7 +26,8 @@ class Game
     #check if any next moves toward this dirrection are still possible
     unless tetromino_will_fit?(0,1)
       lock_tetromino
-      @board.clean_full_rows
+      rows_cleaned = @board.clean_full_rows
+      update_score(rows_cleaned)
     end
   end
 
@@ -83,5 +83,17 @@ class Game
     @next_tetromino = random_tetromino
     
     @game_over = true unless tetromino_will_fit?(0, 0)
+  end
+
+  def update_score(rows_cleaned)
+    if rows_cleaned == 1 
+      @score += 100
+    elsif rows_cleaned == 2
+      @score += 350
+    elsif rows_cleaned == 3
+      @score += 600
+    elsif rows_cleaned >= 0
+      @score += rows_cleaned * 350
+    end
   end
 end
