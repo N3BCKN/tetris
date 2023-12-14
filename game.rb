@@ -1,10 +1,13 @@
 class Game
   def initialize
     @board = Board.new
+    @interface = Interface.new
     @tetrominos = generate_tetrominos
     @current_tetromino = random_tetromino
     @next_tetromino = random_tetromino
     @game_over = false
+    @paused = false
+    @score = 0 
   end 
 
   def move_left
@@ -33,6 +36,12 @@ class Game
   def draw
     @board.draw
     @current_tetromino.draw
+
+    @interface.draw_score(@score)
+    @interface.draw_next_tetromino(@next_tetromino)
+
+
+    @interface.draw_message
   end
 
   private 
