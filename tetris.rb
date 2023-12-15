@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require('ruby2d')
 
 require_relative('./paint')
@@ -10,7 +12,7 @@ require_relative('./game')
 WIDTH      = 300
 HEIGHT     = 600
 INTERFACE_WIDTH = 200
-INTERFACE_HEIGHT = 20 
+INTERFACE_HEIGHT = 20
 TILE_SIZE  = 30
 
 set width: WIDTH + INTERFACE_WIDTH
@@ -35,7 +37,7 @@ update do
     next
   end
 
-  game.move_down if Window.frames % 30 == 0 
+  game.move_down if (Window.frames % 30).zero?
 end
 
 on :key_down do |event|
@@ -50,11 +52,11 @@ on :key_down do |event|
     when 'up'
       game.rotate_tetromino
     end
-  end 
+  end
 end
 
 on :key_held do |event|
   game.move_down if event.key == 'down' && !game.game_over && !game.paused
 end
 
-show 
+show
