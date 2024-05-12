@@ -9,8 +9,6 @@ class Board
   end
 
   def draw
-    rows = 0
-    cols = 0
     @grid.each_with_index do |row, i|
       row.each_with_index do |val, j|
         Square.new(x: j * TILE_SIZE, y: i * TILE_SIZE, size: TILE_SIZE - 1, color: @paints[val])
