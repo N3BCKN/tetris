@@ -1,5 +1,11 @@
 # frozen_string_literal: true
 
+require_relative('./paint')
+require_relative('./board')
+require_relative('./tetromino')
+require_relative('./tetrominos')
+require_relative('./interface')
+
 class Game
   attr_accessor :paused, :game_over
 
